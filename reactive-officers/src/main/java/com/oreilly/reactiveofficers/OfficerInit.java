@@ -10,22 +10,22 @@ import reactor.core.publisher.Flux;
 
 @Component
 public class OfficerInit implements ApplicationRunner {
-    private OfficerRepository repository;
+    private final OfficerRepository repository;
 
     public OfficerInit(OfficerRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         repository.deleteAll()
-           .thenMany(Flux.just(new Officer(Rank.CAPTAIN, "James", "Kirk"),
-                               new Officer(Rank.CAPTAIN, "Jean-Luc", "Picard"),
-                               new Officer(Rank.CAPTAIN, "Benjamin", "Sisko"),
-                               new Officer(Rank.CAPTAIN, "Kathryn", "Janeway"),
-                               new Officer(Rank.CAPTAIN, "Jonathan", "Archer")))
-           .flatMap(repository::save)
-           .thenMany(repository.findAll())
-           .subscribe(System.out::println);
+                .thenMany(Flux.just(new Officer(Rank.CAPTAIN, "James", "Kirk"),
+                        new Officer(Rank.CAPTAIN, "Jean-Luc", "Picard"),
+                        new Officer(Rank.CAPTAIN, "Benjamin", "Sisko"),
+                        new Officer(Rank.CAPTAIN, "Kathryn", "Janeway"),
+                        new Officer(Rank.CAPTAIN, "Jonathan", "Archer")))
+                .flatMap(repository::save)
+                .thenMany(repository.findAll())
+                .subscribe(System.out::println);
     }
 }

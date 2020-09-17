@@ -16,10 +16,10 @@ public class RouterConfig {
     public RouterFunction<ServerResponse> route(OfficerHandler handler) {
         return RouterFunctions
                 .route(GET("/route/{id}").and(accept(APPLICATION_JSON)),
-                       handler::getOfficer)
+                        handler::getOfficer)
                 .andRoute(GET("/route").and(accept(APPLICATION_JSON)),
-                          handler::listOfficers)
+                        handler::listOfficers)
                 .andRoute(POST("/route").and(contentType(APPLICATION_JSON)),
-                          handler::createOfficer);
+                        handler::createOfficer);
     }
 }

@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/officers")
 public class OfficerController {
-    private OfficerRepository repository;
+    private final OfficerRepository repository;
 
     public OfficerController(OfficerRepository repository) {
         this.repository = repository;
@@ -37,22 +37,22 @@ public class OfficerController {
     public Mono<ResponseEntity<Officer>> updateOfficer(@PathVariable(value = "id") String id,
                                                        @RequestBody Officer officer) {
         return repository.findById(id)
-                         .flatMap(existingOfficer -> {
-                             existingOfficer.setRank(officer.getRank());
-                             existingOfficer.setFirst(officer.getFirst());
-                             existingOfficer.setLast(officer.getLast());
-                             return repository.save(existingOfficer);
-                         })
-                         .map(updateOfficer -> new ResponseEntity<>(updateOfficer, HttpStatus.OK))
-                         .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .flatMap(existingOfficer -> {
+                    existingOfficer.setRank(officer.getRank());
+                    existingOfficer.setFirst(officer.getFirst());
+                    existingOfficer.setLast(officer.getLast());
+                    return repository.save(existingOfficer);
+                })
+                .map(updateOfficer -> new ResponseEntity<>(updateOfficer, HttpStatus.OK))
+                .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<ResponseEntity<Void>> deleteOfficer(@PathVariable(value = "id") String id) {
         return repository.deleteById(id)
-                         .then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)))
-                         .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)))
+                .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping

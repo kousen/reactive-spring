@@ -3,14 +3,18 @@ package com.oreilly.reactiveofficers.entities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Objects;
+
 @Document
 public class Officer {
-    @Id private String id;
+    @Id
+    private String id;
     private Rank rank;
     private String first;
     private String last;
 
-    public Officer() {}
+    public Officer() {
+    }
 
     public Officer(Rank rank, String first, String last) {
         this.rank = rank;
@@ -76,7 +80,7 @@ public class Officer {
 
         if (!id.equals(officer.id)) return false;
         if (rank != officer.rank) return false;
-        if (first != null ? !first.equals(officer.first) : officer.first != null) return false;
+        if (!Objects.equals(first, officer.first)) return false;
         return last.equals(officer.last);
     }
 
