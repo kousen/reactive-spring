@@ -71,4 +71,30 @@ public class OfficerRepositoryTest {
                 .verifyComplete();
     }
 
+    @Test
+    public void findByRank() {
+        StepVerifier.create(
+                repository.findByRank(Rank.CAPTAIN)
+                        .map(Officer::getRank)
+                        .distinct())
+                .expectNextCount(1)
+                .verifyComplete();
+
+        StepVerifier.create(
+                repository.findByRank(Rank.ENSIGN)
+                        .map(Officer::getRank)
+                        .distinct())
+                .verifyComplete();
+
+    }
+
+    @Test
+    public void findByLast() {
+        officers.stream()
+                .map(Officer::getLast)
+                .forEach(lastName -> StepVerifier.create(repository.findByLast(lastName))
+                        .expectNextMatches(officer -> officer.getLast().equals(lastName))
+                        .verifyComplete());
+    }
+
 }
