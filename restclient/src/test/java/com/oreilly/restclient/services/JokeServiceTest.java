@@ -26,9 +26,17 @@ public class JokeServiceTest {
     }
 
     @Test
+    public void getJokeWrappedSync() {
+        String joke = service.getJokeSyncWrapped("Craig", "Walls")
+                .block(Duration.ofSeconds(2));
+        logger.info("\nWrapped synchronous: " + joke);
+        assertTrue(joke.contains("Craig") || joke.contains("Walls"));
+    }
+
+    @Test
     public void getJokeAsync() {
         String joke = service.getJokeAsync("Craig", "Walls")
-                             .block(Duration.ofSeconds(2));
+                .block(Duration.ofSeconds(2));
         logger.info("\nAsynchronous: " + joke);
         assertTrue(joke.contains("Craig") || joke.contains("Walls"));
     }
@@ -36,10 +44,58 @@ public class JokeServiceTest {
     @Test
     public void useStepVerifier() {
         StepVerifier.create(service.getJokeAsync("Craig", "Walls"))
-                    .assertNext(joke -> {
-                        logger.info("\nStepVerifier: " + joke);
-                        assertTrue(joke.contains("Craig") || joke.contains("Walls"));
-                    })
-                    .verifyComplete();
+                .assertNext(joke -> {
+                    logger.info("\nStepVerifier: " + joke);
+                    assertTrue(joke.contains("Craig") || joke.contains("Walls"));
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    public void useStepVerifierForMultipleCalls() {
+        StepVerifier.create(service.getMultipleJokes(5, "Craig", "Walls"))
+                .assertNext(joke -> {
+                    logger.info("\nJoke 1: " + joke);
+                    assertTrue(joke.contains("Craig") || joke.contains("Walls"));
+                })
+                .assertNext(joke -> {
+                    logger.info("\nJoke 2: " + joke);
+                    assertTrue(joke.contains("Craig") || joke.contains("Walls"));
+                })
+                .assertNext(joke -> {
+                    logger.info("\nJoke 3: " + joke);
+                    assertTrue(joke.contains("Craig") || joke.contains("Walls"));
+                })
+                .assertNext(joke -> {
+                    logger.info("\nJoke 4: " + joke);
+                    assertTrue(joke.contains("Craig") || joke.contains("Walls"));
+                })
+                .assertNext(joke -> {
+                    logger.info("\nJoke 5: " + joke);
+                    assertTrue(joke.contains("Craig") || joke.contains("Walls"));
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    public void useStepVerifierForMultipleCallsPublishOn() {
+        StepVerifier.create(service.getMultipleJokesPublishOn(4, "Craig", "Walls"))
+                .assertNext(joke -> {
+                    logger.info("\nJoke 1: " + joke);
+                    assertTrue(joke.contains("Craig") || joke.contains("Walls"));
+                })
+                .assertNext(joke -> {
+                    logger.info("\nJoke 2: " + joke);
+                    assertTrue(joke.contains("Craig") || joke.contains("Walls"));
+                })
+                .assertNext(joke -> {
+                    logger.info("\nJoke 3: " + joke);
+                    assertTrue(joke.contains("Craig") || joke.contains("Walls"));
+                })
+                .assertNext(joke -> {
+                    logger.info("\nJoke 4: " + joke);
+                    assertTrue(joke.contains("Craig") || joke.contains("Walls"));
+                })
+                .verifyComplete();
     }
 }
