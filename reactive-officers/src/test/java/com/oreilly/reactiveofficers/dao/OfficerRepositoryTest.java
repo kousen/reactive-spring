@@ -37,14 +37,13 @@ public class OfficerRepositoryTest {
     public void save() {
         Officer lorca = new Officer(Rank.CAPTAIN, "Gabriel", "Lorca");
         StepVerifier.create(repository.save(lorca))
-                .expectNextMatches(officer -> !officer.getId()
-                        .equals(""))
+                .expectNextMatches(officer -> !officer.getId().equals(""))
                 .verifyComplete();
     }
 
     @Test
     public void findAll() {
-        StepVerifier.create(repository.findAll())
+        StepVerifier.create(repository.findAll().log())
                 .expectNextCount(5)
                 .verifyComplete();
     }

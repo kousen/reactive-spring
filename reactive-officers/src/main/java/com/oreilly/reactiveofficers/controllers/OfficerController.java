@@ -2,6 +2,7 @@ package com.oreilly.reactiveofficers.controllers;
 
 import com.oreilly.reactiveofficers.dao.OfficerRepository;
 import com.oreilly.reactiveofficers.entities.Officer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,14 @@ import reactor.core.publisher.Mono;
 public class OfficerController {
     private final OfficerRepository repository;
 
+    @Autowired
     public OfficerController(OfficerRepository repository) {
         this.repository = repository;
     }
 
     @GetMapping
     public Flux<Officer> getAllOfficers() {
-        return repository.findAll();
+        return repository.findAll().log();
     }
 
     @GetMapping("{id}")
@@ -48,7 +50,7 @@ public class OfficerController {
     }
 
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    // @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<ResponseEntity<Void>> deleteOfficer(@PathVariable(value = "id") String id) {
         return repository.deleteById(id)
                 .then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)))
