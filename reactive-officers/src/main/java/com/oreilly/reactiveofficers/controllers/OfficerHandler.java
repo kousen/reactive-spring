@@ -35,8 +35,7 @@ public class OfficerHandler {
 
     public Mono<ServerResponse> getOfficer(ServerRequest request) {
         String id = request.pathVariable("id");
-        Mono<ServerResponse> notFound = ServerResponse.notFound()
-                .build();
+        Mono<ServerResponse> notFound = ServerResponse.notFound().build();
         Mono<Officer> personMono = this.repository.findById(id);
         return personMono
                 .flatMap(person -> ServerResponse.ok()
