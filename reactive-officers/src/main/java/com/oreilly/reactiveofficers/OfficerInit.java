@@ -3,6 +3,7 @@ package com.oreilly.reactiveofficers;
 import com.oreilly.reactiveofficers.dao.OfficerRepository;
 import com.oreilly.reactiveofficers.entities.Officer;
 import com.oreilly.reactiveofficers.entities.Rank;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Flux;
 public class OfficerInit implements ApplicationRunner {
     private final OfficerRepository repository;
 
+    @Autowired
     public OfficerInit(OfficerRepository repository) {
         this.repository = repository;
     }
