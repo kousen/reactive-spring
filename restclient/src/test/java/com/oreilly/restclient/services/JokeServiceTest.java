@@ -1,5 +1,6 @@
 package com.oreilly.restclient.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,9 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.test.StepVerifier;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @SpringBootTest
 public class JokeServiceTest {
@@ -17,6 +24,18 @@ public class JokeServiceTest {
 
     @Autowired
     private JokeService service;
+
+    @BeforeEach
+    void setUp() throws IOException, InterruptedException {
+        HttpResponse<Void> response = HttpClient.newHttpClient()
+                .send(HttpRequest.newBuilder()
+                                .uri(URI.create("http://icndb.com"))  // .HEAD() in Java 18
+                                .method("HEAD", HttpRequest.BodyPublishers.noBody())
+                                .build(),
+                        HttpResponse.BodyHandlers.discarding());
+        assumeTrue(response.statusCode() == 200, "ICNDB API site is down");
+    }
+
 
     @Test
     public void getJokeSync() {
