@@ -16,9 +16,9 @@ public class AstroService {
     private final WebClient client;
 
     @Autowired
-    public AstroService(RestTemplateBuilder builder, WebClient.Builder webClientBuilder) {
+    public AstroService(RestTemplateBuilder builder) {
         this.template = builder.build();
-        this.client = webClientBuilder.baseUrl("http://api.open-notify.org").build();
+        this.client = WebClient.create("http://api.open-notify.org");
     }
 
     public Mono<AstroResponse> getAstroResponseAsync() {
@@ -34,7 +34,7 @@ public class AstroService {
         return template.getForObject("http://api.open-notify.org/astros.json", String.class);
     }
 
-    public AstroResponse getAstroResponse() {
+    public AstroResponse getAstroResponseSync() {
         return template.getForObject("http://api.open-notify.org/astros.json", AstroResponse.class);
     }
 }

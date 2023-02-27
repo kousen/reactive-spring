@@ -24,8 +24,8 @@ class AstroServiceTest {
     }
 
     @Test
-    void getAstroResponse() {
-        AstroResponse response = service.getAstroResponse();
+    void getAstroResponseSync() {
+        AstroResponse response = service.getAstroResponseSync();
         assertNotNull(response);
         assertEquals("success", response.message());
         assertTrue(response.number() >= 0);
@@ -35,7 +35,8 @@ class AstroServiceTest {
 
     @Test
     void getAstroResponseAsync() {
-        AstroResponse response = service.getAstroResponseAsync().block(Duration.ofSeconds(2));
+        AstroResponse response = service.getAstroResponseAsync()
+                .block(Duration.ofSeconds(2));
         assertNotNull(response);
         assertEquals("success", response.message());
         assertTrue(response.number() >= 0);
@@ -45,7 +46,8 @@ class AstroServiceTest {
 
     @Test
     void getAstroResponseAsyncStepVerifier() {
-        StepVerifier.create(service.getAstroResponseAsync())
+        service.getAstroResponseAsync()
+                .as(StepVerifier::create)
                 .assertNext(response -> {
                     assertNotNull(response);
                     assertEquals("success", response.message());
