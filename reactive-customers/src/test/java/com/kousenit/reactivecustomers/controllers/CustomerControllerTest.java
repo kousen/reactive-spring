@@ -13,9 +13,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SuppressWarnings("SqlResolve")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CustomerControllerTest {
+public class CustomerControllerTest {
 
     @Autowired
     private WebTestClient client;
@@ -67,7 +66,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void findById() {
+    void findByIdExists() {
         getIds().forEach(id ->
                 client.get()
                         .uri("/customers/%d".formatted(id))
@@ -75,6 +74,14 @@ class CustomerControllerTest {
                         .expectStatus().isOk()
                         .expectBody(Customer.class)
                         .value(customer -> assertEquals(id, customer.id())));
+    }
+
+    @Test
+    void findByIdNotFound() {
+        client.get()
+                .uri("/customers/999")
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
@@ -103,6 +110,7 @@ class CustomerControllerTest {
         client.delete()
                 .uri("/customers/999")
                 .exchange()
-                .expectStatus().isBadRequest();
+                .expectStatus().isNotFound();
     }
+
 }

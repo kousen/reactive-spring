@@ -4,6 +4,7 @@ import com.kousenit.reactivecustomers.dao.CustomerRepository;
 import com.kousenit.reactivecustomers.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,10 +25,10 @@ public class CustomerController {
     }
 
     @GetMapping("{id}")
-    public Mono<Customer> findById(@PathVariable Long id) {
-        return repository.findById(id).switchIfEmpty(
-                Mono.error(new IllegalArgumentException(
-                        "Customer with id %d not found".formatted(id))));
+    public Mono<ResponseEntity<Customer>> findById(@PathVariable Long id) {
+        return repository.findById(id)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @PostMapping
