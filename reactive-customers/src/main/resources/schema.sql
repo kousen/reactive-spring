@@ -1,3 +1,4 @@
+drop table if exists customer;
 create table customer
 (
     id         long generated always as identity primary key,
