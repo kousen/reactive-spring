@@ -81,7 +81,6 @@ class CustomerRepositoryTest {
     @Test
     void deleteCustomer() {
         repository.deleteById(customers.get(0).id())
-                .doOnNext(System.out::println)
                 .as(StepVerifier::create)
                 .verifyComplete();
     }

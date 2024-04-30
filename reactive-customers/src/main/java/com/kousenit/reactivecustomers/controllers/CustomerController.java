@@ -27,6 +27,7 @@ public class CustomerController {
     @GetMapping("{id}")
     public Mono<ResponseEntity<Customer>> findById(@PathVariable Long id) {
         return repository.findById(id)
+                .log()
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }

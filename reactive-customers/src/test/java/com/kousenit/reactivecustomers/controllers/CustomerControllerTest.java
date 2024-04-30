@@ -61,8 +61,7 @@ public class CustomerControllerTest {
         client.get()
                 .uri("/customers")
                 .exchange()
-                .expectStatus()
-                .isOk()
+                .expectStatus().isOk()
                 .expectBodyList(Customer.class)
                 .hasSize(5);
     }
@@ -73,8 +72,7 @@ public class CustomerControllerTest {
                 client.get()
                         .uri("/customers/%d".formatted(id))
                         .exchange()
-                        .expectStatus()
-                        .isOk()
+                        .expectStatus().isOk()
                         .expectBody(Customer.class)
                         .value(customer -> assertEquals(id, customer.id())));
     }
@@ -84,8 +82,7 @@ public class CustomerControllerTest {
         client.get()
                 .uri("/customers/999")
                 .exchange()
-                .expectStatus()
-                .isNotFound();
+                .expectStatus().isNotFound();
     }
 
     @Test
@@ -95,8 +92,7 @@ public class CustomerControllerTest {
                 .uri("/customers")
                 .bodyValue(customer)
                 .exchange()
-                .expectStatus()
-                .isCreated()
+                .expectStatus().isCreated()
                 .expectBody(Customer.class)
                 .value(c -> assertEquals("Inara", c.firstName()));
     }
@@ -107,8 +103,7 @@ public class CustomerControllerTest {
                 client.delete()
                         .uri("/customers/%d".formatted(id))
                         .exchange()
-                        .expectStatus()
-                        .isNoContent());
+                        .expectStatus().isNoContent());
     }
 
     @Test
@@ -116,8 +111,7 @@ public class CustomerControllerTest {
         client.delete()
                 .uri("/customers/999")
                 .exchange()
-                .expectStatus()
-                .isNotFound();
+                .expectStatus().isNotFound();
     }
 
     @Test
@@ -126,8 +120,7 @@ public class CustomerControllerTest {
                 .uri("/customers/1")
                 .bodyValue(new Customer(1L, "Mal", "Reynolds"))
                 .exchange()
-                .expectStatus()
-                .isEqualTo(HttpStatus.METHOD_NOT_ALLOWED);
+                .expectStatus().isEqualTo(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
 }
