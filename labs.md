@@ -10,6 +10,7 @@ This document contains hands-on exercises for learning reactive programming with
 4. [Project Reactor Tutorial](#project-reactor-tutorial)
 5. [Reactive Spring Data](#reactive-spring-data)
 6. [Spring WebFlux with Annotated Controllers](#spring-webflux-with-annotated-controllers)
+7. [Functional Web Programming with WebFlux](#functional-web-programming-with-webflux)
 
 ## Building a REST Client
 
