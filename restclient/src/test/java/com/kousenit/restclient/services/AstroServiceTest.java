@@ -58,4 +58,62 @@ class AstroServiceTest {
                 .verifyComplete();
     }
 
+    // Scheduler Tests
+
+    @Test
+    void testSaveAstronautsToFile() {
+        System.out.println("\n=== Testing saveAstronautsToFile() ===");
+        
+        service.saveAstronautsToFile()
+                .as(StepVerifier::create)
+                .assertNext(result -> {
+                    assertNotNull(result);
+                    assertTrue(result.contains("File written with"));
+                    System.out.println("Result: " + result);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void testSchedulerDifferences() {
+        System.out.println("\n=== Testing demonstrateSchedulerDifferences() ===");
+        
+        service.demonstrateSchedulerDifferences()
+                .as(StepVerifier::create)
+                .assertNext(result -> {
+                    assertNotNull(result);
+                    assertTrue(result.contains("single threaded"));
+                    System.out.println("Final result: " + result);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void testLegacyBlockingService() {
+        System.out.println("\n=== Testing callLegacyBlockingService() ===");
+        
+        service.callLegacyBlockingService("test input")
+                .as(StepVerifier::create)
+                .assertNext(result -> {
+                    assertNotNull(result);
+                    assertTrue(result.contains("Blocking result for: test input"));
+                    System.out.println("Blocking service result: " + result);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void testProcessAndSaveData() {
+        System.out.println("\n=== Testing processAndSaveData() ===");
+        
+        service.processAndSaveData()
+                .as(StepVerifier::create)
+                .assertNext(result -> {
+                    assertNotNull(result);
+                    assertTrue(result.contains("Processing complete"));
+                    System.out.println("Combined operation result: " + result);
+                })
+                .verifyComplete();
+    }
+
 }

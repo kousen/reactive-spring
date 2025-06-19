@@ -90,15 +90,17 @@ The `labs.md` file contains detailed exercises covering:
 2. **Asynchronous Access** - WebClient and reactive streams
 3. **HTTP Interfaces** - Spring 6+ declarative HTTP clients
 4. **Project Reactor Tutorial** - Flux and Mono fundamentals
-5. **Reactive Spring Data** - R2DBC and reactive repositories
-6. **Annotated Controllers** - Traditional Spring MVC style with reactive types
-7. **Functional Web Programming** - RouterFunction and handler-based approach
+5. **Working with Schedulers** - Thread management and blocking operations
+6. **Reactive Spring Data** - R2DBC and reactive repositories
+7. **Annotated Controllers** - Traditional Spring MVC style with reactive types
+8. **Functional Web Programming** - RouterFunction and handler-based approach (Optional)
 
 ## Key Learning Objectives
 
 - Understand reactive programming concepts and benefits
 - Master Project Reactor's Flux and Mono types
 - Build reactive REST clients using multiple approaches
+- Control thread execution with schedulers for blocking operations
 - Implement reactive data access with R2DBC
 - Create reactive web endpoints using both programming models
 - Write effective tests for reactive applications

@@ -24,7 +24,7 @@ reactive-spring/                     <- Multi-module Gradle project (ROOT)
 │       │   ├── Assignment.java            <- Record for astronaut data
 │       │   └── AstroResponse.java         <- Record for API response
 │       └── services/
-│           ├── AstroService.java          <- RestTemplate, WebClient, RestClient examples
+│           ├── AstroService.java          <- RestClient, WebClient + Scheduler examples
 │           └── AstroInterface.java        <- HTTP Interface (@GetExchange)
 └── reactive-customers/            <- Reactive data + web (com.kousenit.reactivecustomers)
     ├── build.gradle               <- Dependencies: spring-data-r2dbc, webflux, h2, r2dbc-h2
@@ -99,12 +99,12 @@ CREATE TABLE customer (
 ## Build & Test Status
 
 - **✅ All builds successful**: Both projects compile and package correctly
-- **✅ All tests passing**: 7/7 tests pass (100% success rate)
+- **✅ All tests passing**: 12/12 tests pass (100% success rate)
 - **✅ Multi-module structure**: Root gradlew manages both subprojects
 - **✅ No external dependencies**: Works offline (except for external API calls)
 
 ### Test Breakdown
-- **restclient**: 7 tests (AstroService, AstroInterface, context)
+- **restclient**: 10 tests (AstroService with scheduler examples, AstroInterface, context)
 - **reactive-customers**: Multiple test classes for controllers, handlers, repositories
 
 ## Labs.md Structure
@@ -113,9 +113,10 @@ CREATE TABLE customer (
 2. **Asynchronous Access** - WebClient introduction  
 3. **HTTP Interfaces** - Spring 6+ declarative clients
 4. **Project Reactor Tutorial** - External GitHub tutorial reference
-5. **Reactive Spring Data** - R2DBC + repositories
-6. **Annotated Controllers** - Traditional @RestController approach
-7. **Functional Web Programming** - RouterFunction approach (NEW)
+5. **Working with Schedulers** - Thread management and blocking operations (NEW)
+6. **Reactive Spring Data** - R2DBC + repositories
+7. **Annotated Controllers** - Traditional @RestController approach
+8. **Functional Web Programming** - RouterFunction approach (Optional)
 
 ## Common Operations
 
@@ -139,7 +140,9 @@ CREATE TABLE customer (
 2. **Package Rename**: com.oreilly → com.kousenit throughout
 3. **Version Updates**: Spring Boot 3.5.2, Gradle 8.14.2
 4. **Functional Web**: Added RouterConfig, CustomerHandler, CustomerHandlerTest
-5. **Cleanup**: Removed failing external APIs, duplicate files, outdated docs
+5. **Scheduler Examples**: Added comprehensive scheduler demonstrations in AstroService
+6. **Enhanced Labs**: Added navigation links and working code examples
+7. **Cleanup**: Removed failing external APIs, duplicate files, outdated docs
 
 ### Git History Pattern
 - Multiple commits with detailed messages
@@ -149,8 +152,8 @@ CREATE TABLE customer (
 ## Training Course Context
 
 **Target Audience**: Java developers learning reactive programming
-**Duration**: Multi-day intensive course
-**Learning Progression**: REST clients → Reactive data → Reactive web
+**Duration**: 5-hour intensive course (upgraded from 4 hours)
+**Learning Progression**: REST clients → Schedulers → Reactive data → Reactive web
 **Hands-on Focus**: Working code examples, comprehensive tests, practical exercises
 
 ## Notes for Future Sessions

@@ -162,6 +162,8 @@ This exercise uses the `RestClient` class to synchronously access a RESTful web 
 
 19. Execute the test and make any needed corrections until it passes.
 
+[Back to Table of Contents](#table-of-contents)
+
 ## Asynchronous Access
 
 The `webflux` module in Spring allows you to use the Project Reactor types `Flux` and `Mono`. Methods that work synchronously with `RestClient` can be converted to asynchronous by changing the return type to one of those types and using `WebClient` instead.
@@ -234,6 +236,8 @@ The `webflux` module in Spring allows you to use the Project Reactor types `Flux
 
 6. Both of the new tests should now pass. The details of the `StepVerifier` class will be discussed during the course.
 
+[Back to Table of Contents](#table-of-contents)
+
 ## HTTP Interfaces (Spring Boot 3+)
 
 If you are using Spring Boot 3.0 or above (and therefore Spring 6.0 or above), there is a new way to access external restful web services. The [Spring 6 documentation](https://docs.spring.io/spring-framework/docs/current/reference/html/integration.html#spring-integration) has a section on REST clients, which includes the `RestTemplate` and `WebClient` classes discussed above, as well as something called HTTP Interface.
@@ -287,6 +291,8 @@ The idea is to declare an interface with the access methods you want, and add a 
 
 7. That test should pass. Note that for synchronous access, simply change the return type of the method inside the `getAstroResponse` method of `AstroInterface` to `AstroResponse` instead of the `Mono`. See the documentation for additional details.
 
+[Back to Table of Contents](#table-of-contents)
+
 ## Project Reactor Tutorial
 
 This exercise works with a tutorial provided by [Project Reactor](https://projectreactor.io/) to teach the basics of the classes `Flux` and `Mono`.
@@ -309,9 +315,14 @@ This exercise works with a tutorial provided by [Project Reactor](https://projec
 
 Hopefully, you will find _Appendix A_ in the reference guide helpful in this, along with the Javadocs.
 
+[Back to Table of Contents](#table-of-contents)
+
 ## Working with Schedulers
 
 Understanding schedulers is crucial for effective reactive programming. This exercise demonstrates how to properly handle blocking operations and control thread execution in reactive chains.
+
+> [!NOTE]
+> Working examples of all scheduler concepts are implemented in the `AstroService` class in the `restclient` project. You can run the tests to see the scheduler behavior in action and observe thread switching in the console output.
 
 ### The Problem: Blocking Operations
 
@@ -445,7 +456,28 @@ By default, reactive operations execute on the calling thread. When you introduc
 - **File I/O, database calls, and HTTP requests** typically need `boundedElastic()`
 - **Watch the thread names** in logs to understand where your code is running
 
-Run the tests and observe the thread names in the output. You should see operations switching between different thread pools based on your scheduler choices.
+### Running the Examples
+
+The `AstroService` class includes these working scheduler examples:
+
+1. **`saveAstronautsToFile()`** - Demonstrates `publishOn(Schedulers.boundedElastic())` for file I/O
+2. **`demonstrateSchedulerDifferences()`** - Shows `publishOn()` vs `subscribeOn()` behavior  
+3. **`callLegacyBlockingService()`** - Handles blocking operations with `subscribeOn()`
+4. **`processAndSaveData()`** - Combines reactive and blocking operations efficiently
+
+To see these examples in action:
+
+```bash
+# Run all tests including scheduler examples
+./gradlew :restclient:test
+
+# Run just the scheduler tests
+./gradlew :restclient:test --tests "*Scheduler*" --tests "*SaveAstronauts*" --tests "*LegacyBlocking*" --tests "*ProcessAndSave*"
+```
+
+Watch the console output to see thread names changing as operations move between different schedulers. You should see operations switching between different thread pools based on your scheduler choices.
+
+[Back to Table of Contents](#table-of-contents)
 
 ## Reactive Spring Data
 
@@ -876,6 +908,8 @@ Run the tests and observe the thread names in the output. You should see operati
 
 24. This will convert any `IllegalArgumentException` into a `NOT_FOUND`. Spring Boot 3 also contains an interesting class called `ProblemDetail` that can be used as an alternative to give back more information. If there is time, this will be discussed during class.
 
+[Back to Table of Contents](#table-of-contents)
+
 ## Functional Web Programming with WebFlux (Optional)
 
 Spring WebFlux also supports a functional programming approach to web development, which is an alternative to the traditional annotated controller approach shown above. While less commonly used in production applications, this approach provides a more explicit way to handle HTTP requests and gives you complete control over the response building process.
@@ -1095,6 +1129,8 @@ Spring WebFlux also supports a functional programming approach to web developmen
 10. The functional approach provides a more explicit way to handle HTTP requests and responses, giving you complete control over the response building process. It's particularly useful for complex routing scenarios or when you need fine-grained control over request processing.
 
 11. Run both sets of tests to verify that both the annotated controller approach (`/customers`) and the functional approach (`/functional/customers`) work correctly with the same underlying data and business logic.
+
+[Back to Table of Contents](#table-of-contents)
 
 ---
 
