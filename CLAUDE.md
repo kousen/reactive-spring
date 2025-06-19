@@ -99,12 +99,12 @@ CREATE TABLE customer (
 ## Build & Test Status
 
 - **✅ All builds successful**: Both projects compile and package correctly
-- **✅ All tests passing**: 11/11 tests pass (100% success rate)
+- **✅ All tests passing**: 32/32 tests pass (100% success rate)
 - **✅ Multi-module structure**: Root gradlew manages both subprojects
 - **✅ No external dependencies**: Works offline (except for external API calls)
 
 ### Test Breakdown
-- **restclient**: 9 tests (AstroService with scheduler examples, AstroInterface)
+- **restclient**: 12 tests (11 AstroService with scheduler examples, 1 AstroInterface)
 - **reactive-customers**: Multiple test classes for controllers, handlers, repositories
 
 ## Labs.md Structure

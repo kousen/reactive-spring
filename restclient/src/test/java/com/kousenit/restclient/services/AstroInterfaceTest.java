@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.test.StepVerifier;
 
+import java.time.Duration;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -20,7 +22,8 @@ class AstroInterfaceTest {
                     assertEquals(response.number(), response.people().size());
                     System.out.println(response);
                 })
-                .verifyComplete();
+                .expectComplete()
+                .verify(Duration.ofSeconds(10));  // Allow more time for network call
     }
 
 }
