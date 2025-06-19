@@ -7,6 +7,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,10 +18,12 @@ public class AstroService {
 
     private final RestClient restClient;
     private final WebClient webClient;
+    private final ObjectMapper objectMapper;
 
     public AstroService() {
         this.restClient = RestClient.create("http://api.open-notify.org");
         this.webClient = WebClient.create("http://api.open-notify.org");
+        this.objectMapper = new ObjectMapper();
     }
 
     public String getPeopleInSpace() {
@@ -58,14 +61,15 @@ public class AstroService {
         return getAstroResponseAsync()
                 .doOnNext(response -> System.out.println("Fetched data on: " + Thread.currentThread().getName()))
                 .publishOn(Schedulers.boundedElastic())  // Switch to I/O thread pool
-                .map(response -> {
+                .<String>handle((response, sink) -> {
                     System.out.println("Writing file on: " + Thread.currentThread().getName());
                     try {
                         Path file = Paths.get("astronauts.json");
-                        Files.writeString(file, response.toString());
-                        return "File written with " + response.number() + " astronauts";
+                        String jsonString = objectMapper.writeValueAsString(response);
+                        Files.writeString(file, jsonString);
+                        sink.next("File written with " + response.number() + " astronauts");
                     } catch (Exception e) {
-                        throw new RuntimeException("Failed to write file", e);
+                        sink.error(new RuntimeException("Failed to write file", e));
                     }
                 })
                 .doOnNext(result -> System.out.println("File operation completed on: " + Thread.currentThread().getName()));
