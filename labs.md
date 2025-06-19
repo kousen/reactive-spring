@@ -8,9 +8,10 @@ This document contains hands-on exercises for learning reactive programming with
 2. [Asynchronous Access](#asynchronous-access)
 3. [HTTP Interfaces (Spring Boot 3+)](#http-interfaces-spring-boot-3)
 4. [Project Reactor Tutorial](#project-reactor-tutorial)
-5. [Reactive Spring Data](#reactive-spring-data)
-6. [Spring WebFlux with Annotated Controllers](#spring-webflux-with-annotated-controllers)
-7. [Functional Web Programming with WebFlux](#functional-web-programming-with-webflux)
+5. [Working with Schedulers](#working-with-schedulers)
+6. [Reactive Spring Data](#reactive-spring-data)
+7. [Spring WebFlux with Annotated Controllers](#spring-webflux-with-annotated-controllers)
+8. [Functional Web Programming with WebFlux (Optional)](#functional-web-programming-with-webflux-optional)
 
 ## Building a REST Client
 
@@ -307,6 +308,144 @@ This exercise works with a tutorial provided by [Project Reactor](https://projec
 8. If you have time, feel free to look at the other exercises, which are classes labeled from `Part03StepVerifier` to `Part11BlockingToReactive`. Alternatively, you can simply browse the code for them in the _solution_ branch.
 
 Hopefully, you will find _Appendix A_ in the reference guide helpful in this, along with the Javadocs.
+
+## Working with Schedulers
+
+Understanding schedulers is crucial for effective reactive programming. This exercise demonstrates how to properly handle blocking operations and control thread execution in reactive chains.
+
+### The Problem: Blocking Operations
+
+By default, reactive operations execute on the calling thread. When you introduce blocking operations, you can block the entire event loop, defeating the purpose of reactive programming.
+
+1. In the `AstroService` class, let's first create a method that demonstrates the problem:
+
+   ```java
+   import java.nio.file.Files;
+   import java.nio.file.Path;
+   import java.nio.file.Paths;
+   import reactor.core.scheduler.Schedulers;
+   
+   // DON'T DO THIS - blocks the event loop
+   public Mono<String> badFileOperation() {
+       return getAstroResponseAsync()
+               .map(response -> {
+                   try {
+                       // This is a blocking I/O operation!
+                       Path file = Paths.get("astronauts.json");
+                       Files.writeString(file, response.toString());
+                       return "File written with " + response.number() + " astronauts";
+                   } catch (Exception e) {
+                       throw new RuntimeException(e);
+                   }
+               });
+   }
+   ```
+
+### The Solution: Using Schedulers
+
+2. Now create a proper version that uses schedulers to handle blocking operations:
+
+   ```java
+   public Mono<String> saveAstronautsToFile() {
+       return getAstroResponseAsync()
+               .publishOn(Schedulers.boundedElastic())  // Switch to I/O thread pool
+               .map(response -> {
+                   try {
+                       // Now this blocking operation runs on the right thread pool
+                       Path file = Paths.get("astronauts.json");
+                       Files.writeString(file, response.toString());
+                       return "File written with " + response.number() + " astronauts";
+                   } catch (Exception e) {
+                       throw new RuntimeException(e);
+                   }
+               })
+               .doOnNext(result -> System.out.println("Thread: " + Thread.currentThread().getName()));
+   }
+   ```
+
+3. For comparison, also create a method that demonstrates `subscribeOn`:
+
+   ```java
+   public Mono<Integer> countAstronautsWithLogging() {
+       return Mono.fromCallable(() -> {
+               System.out.println("Starting on thread: " + Thread.currentThread().getName());
+               return "Starting computation";
+           })
+           .subscribeOn(Schedulers.boundedElastic())  // Entire chain starts here
+           .flatMap(msg -> getAstroResponseAsync())
+           .map(response -> {
+               System.out.println("Processing on thread: " + Thread.currentThread().getName());
+               return response.number();
+           })
+           .doOnNext(count -> System.out.println("Count: " + count + " on thread: " + Thread.currentThread().getName()));
+   }
+   ```
+
+### Understanding the Schedulers
+
+4. **Key Scheduler Types:**
+   - **`Schedulers.boundedElastic()`** - For blocking I/O operations (file, database, HTTP calls)
+   - **`Schedulers.parallel()`** - For CPU-intensive work
+   - **`Schedulers.immediate()`** - Current thread (default behavior)
+
+5. **Key Differences:**
+   - **`subscribeOn()`** - Affects where the **entire chain** executes
+   - **`publishOn()`** - Affects where **downstream operations** execute
+
+### Testing Your Scheduler Usage
+
+6. Create a test to see the schedulers in action:
+
+   ```java
+   @Test
+   void testSchedulers() {
+       System.out.println("Test starting on: " + Thread.currentThread().getName());
+       
+       String result = service.saveAstronautsToFile()
+               .doOnSubscribe(s -> System.out.println("Subscribed on: " + Thread.currentThread().getName()))
+               .block();
+       
+       assertNotNull(result);
+       assertTrue(result.contains("astronauts"));
+       
+       // Check that file was created
+       assertTrue(Files.exists(Paths.get("astronauts.json")));
+   }
+   
+   @Test  
+   void testSubscribeOn() {
+       System.out.println("Test starting on: " + Thread.currentThread().getName());
+       
+       Integer count = service.countAstronautsWithLogging()
+               .block();
+               
+       assertTrue(count >= 0);
+   }
+   ```
+
+### Real-World Pattern
+
+7. This pattern is extremely common in production applications:
+
+   ```java
+   public Mono<UserProfile> getUserProfile(String userId) {
+       return userRepository.findById(userId)           // Non-blocking database
+               .publishOn(Schedulers.boundedElastic())  // Switch for blocking I/O
+               .flatMap(user -> callLegacyService(user)) // Blocking REST call
+               .publishOn(Schedulers.parallel())        // Switch for CPU work  
+               .map(this::processUserData);             // Transform data
+   }
+   ```
+
+### Key Takeaways
+
+- **Always use `Schedulers.boundedElastic()`** for blocking operations
+- **`publishOn()`** is like changing lanes - affects what comes after
+- **`subscribeOn()`** is like choosing your starting point - affects the whole journey  
+- **File I/O, database calls, and HTTP requests** typically need `boundedElastic()`
+- **Watch the thread names** in logs to understand where your code is running
+
+Run the tests and observe the thread names in the output. You should see operations switching between different thread pools based on your scheduler choices.
 
 ## Reactive Spring Data
 
@@ -737,9 +876,12 @@ Hopefully, you will find _Appendix A_ in the reference guide helpful in this, al
 
 24. This will convert any `IllegalArgumentException` into a `NOT_FOUND`. Spring Boot 3 also contains an interesting class called `ProblemDetail` that can be used as an alternative to give back more information. If there is time, this will be discussed during class.
 
-## Functional Web Programming with WebFlux
+## Functional Web Programming with WebFlux (Optional)
 
-Spring WebFlux also supports a functional programming approach to web development, which is an alternative to the traditional annotated controller approach shown above. In this approach, you create handler classes with methods that process requests, and then configure routes using a `RouterFunction`.
+Spring WebFlux also supports a functional programming approach to web development, which is an alternative to the traditional annotated controller approach shown above. While less commonly used in production applications, this approach provides a more explicit way to handle HTTP requests and gives you complete control over the response building process.
+
+> [!NOTE]
+> This section is optional. The annotated controller approach covered in the previous section is the standard approach used in most Spring applications. The functional approach shown here is valuable for understanding reactive principles more explicitly and for specialized use cases requiring fine-grained control over request processing.
 
 1. Create a new class called `CustomerHandler` in the `com.kousenit.reactivecustomers.controllers` package and annotate it with `@Component`:
 
