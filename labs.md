@@ -456,6 +456,121 @@ By default, reactive operations execute on the calling thread. When you introduc
 - **File I/O, database calls, and HTTP requests** typically need `boundedElastic()`
 - **Watch the thread names** in logs to understand where your code is running
 
+### Understanding publishOn vs subscribeOn
+
+The difference between `publishOn()` and `subscribeOn()` is crucial but often confusing. Here's a detailed explanation:
+
+#### publishOn() - "Switch Lanes for Everything After This Point"
+
+`publishOn()` affects **downstream operations** (everything that comes AFTER it in the chain):
+
+```java
+public Mono<String> demonstratePublishOn() {
+    return Mono.fromCallable(() -> {
+            System.out.println("1. Source: " + Thread.currentThread().getName());
+            return "data";
+        })
+        .map(data -> {
+            System.out.println("2. Before publishOn: " + Thread.currentThread().getName());
+            return data + "-step2";
+        })
+        .publishOn(Schedulers.boundedElastic())  // ← Switch happens HERE
+        .map(data -> {
+            System.out.println("3. After publishOn: " + Thread.currentThread().getName());
+            return data + "-step3";
+        })
+        .map(data -> {
+            System.out.println("4. Still after publishOn: " + Thread.currentThread().getName());
+            return data + "-step4";
+        });
+}
+```
+
+**Output pattern:**
+```
+1. Source: main
+2. Before publishOn: main
+3. After publishOn: boundedElastic-1
+4. Still after publishOn: boundedElastic-1
+```
+
+#### subscribeOn() - "Start the Whole Chain on This Scheduler"
+
+`subscribeOn()` affects **the source and upstream operations** (where the subscription begins):
+
+```java
+public Mono<String> demonstrateSubscribeOn() {
+    return Mono.fromCallable(() -> {
+            System.out.println("1. Source: " + Thread.currentThread().getName());
+            return "data";
+        })
+        .map(data -> {
+            System.out.println("2. Transform: " + Thread.currentThread().getName());
+            return data + "-step2";
+        })
+        .subscribeOn(Schedulers.boundedElastic())  // ← Affects the WHOLE chain
+        .map(data -> {
+            System.out.println("3. After subscribeOn: " + Thread.currentThread().getName());
+            return data + "-step3";
+        });
+}
+```
+
+**Output pattern:**
+```
+1. Source: boundedElastic-1
+2. Transform: boundedElastic-1  
+3. After subscribeOn: boundedElastic-1
+```
+
+#### Combining Both - Real-World Pattern
+
+```java
+public Mono<String> combineSchedulers() {
+    return Mono.fromCallable(() -> {
+            System.out.println("1. Expensive computation: " + Thread.currentThread().getName());
+            // Simulate CPU work
+            return "computed-result";
+        })
+        .subscribeOn(Schedulers.parallel())      // CPU work on parallel scheduler
+        .map(result -> {
+            System.out.println("2. Transform: " + Thread.currentThread().getName());
+            return result + "-transformed";
+        })
+        .publishOn(Schedulers.boundedElastic())  // Switch to I/O scheduler
+        .flatMap(data -> {
+            System.out.println("3. File I/O: " + Thread.currentThread().getName());
+            return saveToFile(data);  // Blocking file operation
+        })
+        .publishOn(Schedulers.single())          // Switch to single thread for final work
+        .map(result -> {
+            System.out.println("4. Final processing: " + Thread.currentThread().getName());
+            return result + "-final";
+        });
+}
+```
+
+**Output pattern:**
+```
+1. Expensive computation: parallel-1
+2. Transform: parallel-1
+3. File I/O: boundedElastic-1
+4. Final processing: single-1
+```
+
+#### Key Rules:
+
+1. **subscribeOn()** placement doesn't matter—it affects the whole chain regardless of where you put it
+2. **publishOn()** placement matters—it only affects operations downstream from where it's placed
+3. **Multiple publishOn()** calls create multiple thread switches
+4. **Multiple subscribeOn()** calls—only the first one matters (closest to the source wins)
+
+#### Common Patterns:
+
+- **I/O-heavy operations**: Use `publishOn(Schedulers.boundedElastic())` right before blocking calls
+- **CPU-intensive work**: Use `subscribeOn(Schedulers.parallel())` for the whole chain
+- **Mixed workloads**: Combine both, switching schedulers as needed with `publishOn()`
+
 ### Running the Examples
 
 The `AstroService` class includes these working scheduler examples:
@@ -464,6 +579,9 @@ The `AstroService` class includes these working scheduler examples:
 2. **`demonstrateSchedulerDifferences()`** - Shows `publishOn()` vs `subscribeOn()` behavior  
 3. **`callLegacyBlockingService()`** - Handles blocking operations with `subscribeOn()`
 4. **`processAndSaveData()`** - Combines reactive and blocking operations efficiently
+5. **`demonstratePublishOn()`** - Shows how `publishOn()` affects downstream operations only
+6. **`demonstrateSubscribeOn()`** - Shows how `subscribeOn()` affects the entire chain
+7. **`combineSchedulers()`** - Real-world example of using multiple schedulers together
 
 To see these examples in action:
 
@@ -473,6 +591,9 @@ To see these examples in action:
 
 # Run just the scheduler tests
 ./gradlew :restclient:test --tests "*Scheduler*" --tests "*SaveAstronauts*" --tests "*LegacyBlocking*" --tests "*ProcessAndSave*"
+
+# Run the publishOn vs subscribeOn demonstration tests
+./gradlew :restclient:test --tests "*DemonstratePublishOn*" --tests "*DemonstrateSubscribeOn*" --tests "*CombineSchedulers*"
 ```
 
 Watch the console output to see thread names changing as operations move between different schedulers. You should see operations switching between different thread pools based on your scheduler choices.

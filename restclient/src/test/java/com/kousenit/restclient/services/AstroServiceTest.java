@@ -116,4 +116,51 @@ class AstroServiceTest {
                 .verifyComplete();
     }
 
+    // Tests for publishOn vs subscribeOn demonstrations
+
+    @Test
+    void testDemonstratePublishOn() {
+        System.out.println("\n=== Testing demonstratePublishOn() ===");
+        System.out.println("Watch for thread switch AFTER publishOn:");
+        
+        service.demonstratePublishOn()
+                .as(StepVerifier::create)
+                .assertNext(result -> {
+                    assertNotNull(result);
+                    assertEquals("data-step2-step3-step4", result);
+                    System.out.println("Final result: " + result);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void testDemonstrateSubscribeOn() {
+        System.out.println("\n=== Testing demonstrateSubscribeOn() ===");
+        System.out.println("Watch for ALL operations on the same thread:");
+        
+        service.demonstrateSubscribeOn()
+                .as(StepVerifier::create)
+                .assertNext(result -> {
+                    assertNotNull(result);
+                    assertEquals("data-step2-step3", result);
+                    System.out.println("Final result: " + result);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void testCombineSchedulers() {
+        System.out.println("\n=== Testing combineSchedulers() ===");
+        System.out.println("Watch for multiple thread switches:");
+        
+        service.combineSchedulers()
+                .as(StepVerifier::create)
+                .assertNext(result -> {
+                    assertNotNull(result);
+                    assertEquals("computed-result-transformed-io-complete-final", result);
+                    System.out.println("Final result: " + result);
+                })
+                .verifyComplete();
+    }
+
 }

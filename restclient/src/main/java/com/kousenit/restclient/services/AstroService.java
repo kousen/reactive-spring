@@ -138,4 +138,80 @@ public class AstroService {
                     return result + " - Processing complete";
                 });
     }
+
+    // Detailed Examples for Understanding publishOn vs subscribeOn
+
+    /**
+     * Demonstrates publishOn() - affects everything AFTER it in the chain.
+     * Watch the thread names to see when the switch happens.
+     */
+    public Mono<String> demonstratePublishOn() {
+        return Mono.fromCallable(() -> {
+                System.out.println("1. Source: " + Thread.currentThread().getName());
+                return "data";
+            })
+            .map(data -> {
+                System.out.println("2. Before publishOn: " + Thread.currentThread().getName());
+                return data + "-step2";
+            })
+            .publishOn(Schedulers.boundedElastic())  // ← Switch happens HERE
+            .map(data -> {
+                System.out.println("3. After publishOn: " + Thread.currentThread().getName());
+                return data + "-step3";
+            })
+            .map(data -> {
+                System.out.println("4. Still after publishOn: " + Thread.currentThread().getName());
+                return data + "-step4";
+            });
+    }
+
+    /**
+     * Demonstrates subscribeOn() - affects the WHOLE chain regardless of placement.
+     * The entire reactive chain runs on the specified scheduler.
+     */
+    public Mono<String> demonstrateSubscribeOn() {
+        return Mono.fromCallable(() -> {
+                System.out.println("1. Source: " + Thread.currentThread().getName());
+                return "data";
+            })
+            .map(data -> {
+                System.out.println("2. Transform: " + Thread.currentThread().getName());
+                return data + "-step2";
+            })
+            .subscribeOn(Schedulers.boundedElastic())  // ← Affects the WHOLE chain
+            .map(data -> {
+                System.out.println("3. After subscribeOn: " + Thread.currentThread().getName());
+                return data + "-step3";
+            });
+    }
+
+    /**
+     * Demonstrates combining both schedulers for real-world scenarios.
+     * Shows how to optimize different types of work on appropriate thread pools.
+     */
+    public Mono<String> combineSchedulers() {
+        return Mono.fromCallable(() -> {
+                System.out.println("1. Expensive computation: " + Thread.currentThread().getName());
+                // Simulate CPU work
+                try { Thread.sleep(50); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+                return "computed-result";
+            })
+            .subscribeOn(Schedulers.parallel())      // CPU work on parallel scheduler
+            .map(result -> {
+                System.out.println("2. Transform: " + Thread.currentThread().getName());
+                return result + "-transformed";
+            })
+            .publishOn(Schedulers.boundedElastic())  // Switch to I/O scheduler
+            .map(data -> {
+                System.out.println("3. Simulated I/O: " + Thread.currentThread().getName());
+                // Simulate blocking I/O
+                try { Thread.sleep(30); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+                return data + "-io-complete";
+            })
+            .publishOn(Schedulers.single())          // Switch to single thread for final work
+            .map(result -> {
+                System.out.println("4. Final processing: " + Thread.currentThread().getName());
+                return result + "-final";
+            });
+    }
 }
