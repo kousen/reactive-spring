@@ -65,9 +65,8 @@ reactive-spring/                     <- Multi-module Gradle project (ROOT)
 - **Why**: Shows both approaches side-by-side for comparison
 
 ### 3. **Multiple REST Client Examples**
-- **RestTemplate**: Synchronous, traditional approach
+- **RestClient**: Modern synchronous approach (Spring 6.1+, replaces RestTemplate)
 - **WebClient**: Reactive, non-blocking
-- **RestClient**: Spring 6+ hybrid approach
 - **HTTP Interfaces**: Declarative, proxy-based (@GetExchange)
 
 ### 4. **Package Naming Convention**
@@ -110,7 +109,7 @@ CREATE TABLE customer (
 
 ## Labs.md Structure
 
-1. **Building a REST Client** - RestTemplate basics
+1. **Building a REST Client** - RestClient basics (modern synchronous client)
 2. **Asynchronous Access** - WebClient introduction  
 3. **HTTP Interfaces** - Spring 6+ declarative clients
 4. **Project Reactor Tutorial** - External GitHub tutorial reference

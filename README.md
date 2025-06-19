@@ -6,7 +6,7 @@ This repository contains exercise solutions and hands-on labs for a comprehensiv
 
 Learn reactive programming with Spring Boot, Spring WebFlux, and Project Reactor through practical exercises covering:
 
-- **REST Clients**: RestTemplate, WebClient, and HTTP Interfaces
+- **REST Clients**: RestClient, WebClient, and HTTP Interfaces
 - **Reactive Data Access**: Spring Data R2DBC with H2 database  
 - **Reactive Web Programming**: Both annotated controllers and functional approaches
 - **Testing**: Comprehensive test coverage with WebTestClient and StepVerifier
@@ -17,7 +17,7 @@ Learn reactive programming with Spring Boot, Spring WebFlux, and Project Reactor
 reactive-spring/
 ├── labs.md                    # Complete lab exercises and instructions
 ├── restclient/               # REST client examples and solutions
-│   ├── RestTemplate          # Synchronous HTTP access
+│   ├── RestClient            # Modern synchronous HTTP access
 │   ├── WebClient             # Reactive HTTP access
 │   └── HTTP Interfaces       # Spring 6+ declarative clients
 └── reactive-customers/       # Reactive Spring Data + WebFlux
@@ -86,7 +86,7 @@ reactive-spring/
 
 The `labs.md` file contains detailed exercises covering:
 
-1. **Building a REST Client** - RestTemplate basics and JSON parsing
+1. **Building a REST Client** - RestClient basics and JSON parsing
 2. **Asynchronous Access** - WebClient and reactive streams
 3. **HTTP Interfaces** - Spring 6+ declarative HTTP clients
 4. **Project Reactor Tutorial** - Flux and Mono fundamentals

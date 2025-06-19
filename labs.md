@@ -13,7 +13,7 @@ This document contains hands-on exercises for learning reactive programming with
 
 ## Building a REST Client
 
-This exercise uses the `RestTemplate` class to synchronously access a RESTful web service. The template is used to convert the response into an object for the rest of the system. Later the `WebClient` class, introduced in Spring 5, will be used to do the same asynchronously.
+This exercise uses the `RestClient` class to synchronously access a RESTful web service. The `RestClient` is Spring's modern replacement for `RestTemplate`, providing a fluent API similar to `WebClient` but for synchronous calls. Later the `WebClient` class will be used to do the same asynchronously.
 
 1. Create a new Spring Boot project (either by using the Initializr at http://start.spring.io or using your IDE) called `restclient`. Add both the _Spring Web_ and the _Spring Reactive Web_ dependencies.
 
@@ -21,31 +21,36 @@ This exercise uses the `RestTemplate` class to synchronously access a RESTful we
 
 3. Add the annotation `@Service` to the class (from the `org.springframework.stereotype` package, so you'll need an `import` statement)
 
-4. Add a private attribute to `AstroService` of type `RestTemplate` called `template`
+4. Add a private attribute to `AstroService` of type `RestClient` called `restClient`
 
-5. Add a constructor to `AstroService` that takes a single argument of type `RestTemplateBuilder`.
-
-   > [!NOTE]
-   > Because there are so many possible configuration options, Spring does not automatically provide a `RestTemplate`. It does, however, provide a `RestTemplateBuilder`, which can be used to configure and create the `RestTemplate`.
-
-6. Inside the constructor, invoke the `build()` method on the `RestTemplateBuilder` and assign the result to the `template` attribute.
-
-   > [!NOTE]
-   > If you provide only a single constructor in a class, you do not need to add the `@Autowired` annotation to it. Spring will inject the arguments anyway
-
-7. The site providing the API is http://open-notify.org/, which is an API based on NASA data. We'll access the _Number of People in Space_ service using a GET request.
-
-8. Add a `public` method to our service called `getPeopleInSpace` that takes no arguments and returns a `String`.
-
-9. Access the API using the `getForObject` method of `RestTemplate` as shown:
+5. Add a constructor to `AstroService` that takes no arguments. Inside the constructor, create the `RestClient` using the static `create()` method with the base URL:
 
    ```java
-   public String getPeopleInSpace() {
-       return template.getForObject("http://api.open-notify.org/astros.json", String.class);
+   public AstroService() {
+       this.restClient = RestClient.create("http://api.open-notify.org");
    }
    ```
 
-10. The `getForObject` method that takes two arguments: the URL to access, and the class to instantiate with the resulting JSON response. It performs an HTTP GET request and parses the returned JSON data. At the moment, all we are asking is for the JSON data to be returned as a `String` in order to verify everything is working properly. To do so, add a test class called `AstroServiceTest` in the same package under `src/test/java`:
+   > [!NOTE]
+   > `RestClient` was introduced in Spring 6.1 as the modern replacement for `RestTemplate`. It provides a fluent API similar to `WebClient` but for synchronous operations.
+
+6. The site providing the API is http://open-notify.org/, which is an API based on NASA data. We'll access the _Number of People in Space_ service using a GET request.
+
+7. Add a `public` method to our service called `getPeopleInSpace` that takes no arguments and returns a `String`.
+
+8. Access the API using the fluent API of `RestClient` as shown:
+
+   ```java
+   public String getPeopleInSpace() {
+       return restClient.get()
+               .uri("/astros.json")
+               .accept(MediaType.APPLICATION_JSON)
+               .retrieve()
+               .body(String.class);
+   }
+   ```
+
+9. The `RestClient` uses a fluent API similar to `WebClient`. The `get()` method starts a GET request, `uri()` specifies the path, `accept()` sets the Accept header, `retrieve()` executes the request, and `body()` extracts the response body as the specified type. To do so, add a test class called `AstroServiceTest` in the same package under `src/test/java`:
 
     ```java
     @SpringBootTest
@@ -127,9 +132,11 @@ This exercise uses the `RestTemplate` class to synchronously access a RESTful we
 
     ```java
     public AstroResponse getAstroResponseSync() {
-        return template.getForObject(
-            "http://api.open-notify.org/astros.json", 
-            AstroResponse.class);
+        return restClient.get()
+                .uri("/astros.json")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(AstroResponse.class);
     }
     ```
 
@@ -155,32 +162,31 @@ This exercise uses the `RestTemplate` class to synchronously access a RESTful we
 
 ## Asynchronous Access
 
-The `webflux` module in Spring allows you to use the Project Reactor types `Flux` and `Mono`. Methods that work synchronously can be converted to asynchronous by changing the return type to one of those types. The `WebClient` class then knows how produce those types, and is now the preferred asynchronous rest client (the class `AsyncRestTemplate` is now deprecated).
+The `webflux` module in Spring allows you to use the Project Reactor types `Flux` and `Mono`. Methods that work synchronously with `RestClient` can be converted to asynchronous by changing the return type to one of those types and using `WebClient` instead.
 
-1. In the `AstroService` class, add an attribute of type `WebClient` that is initialize in the `AstroService` constructor using the `static` method `WebClient.create`, which takes the base URL of the service.
+1. In the `AstroService` class, add an attribute of type `WebClient` that is initialized in the `AstroService` constructor using the `static` method `WebClient.create`, which takes the base URL of the service.
 
    ```java
    @Service
    public class AstroService {
 
-       private final RestTemplate template;
-       private final WebClient client;
+       private final RestClient restClient;
+       private final WebClient webClient;
 
-       @Autowired
-       public AstroService(RestTemplateBuilder builder) {
-           this.template = builder.build();
-           this.client = WebClient.create("http://api.open-notify.org");
+       public AstroService() {
+           this.restClient = RestClient.create("http://api.open-notify.org");
+           this.webClient = WebClient.create("http://api.open-notify.org");
        }
 
        // ... other methods ...
    }
    ```
 
-2. Now add a new method called `getAstroResponseAsync` that takes no arguments and returns a `Mono<AstroResponse>` instead of the `AstroReponse` we used previously. The implementation is:
+2. Now add a new method called `getAstroResponseAsync` that takes no arguments and returns a `Mono<AstroResponse>` instead of the `AstroResponse` we used previously. The implementation is:
 
    ```java
    public Mono<AstroResponse> getAstroResponseAsync() {
-       return client.get()
+       return webClient.get()
                .uri("/astros.json")
                .accept(MediaType.APPLICATION_JSON)
                .retrieve()
