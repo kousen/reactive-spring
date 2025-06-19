@@ -1,6 +1,5 @@
 package com.kousenit.reactivecustomers.controllers;
 
-import com.kousenit.reactivecustomers.dao.CustomerRepository;
 import com.kousenit.reactivecustomers.entities.Customer;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -23,9 +21,6 @@ class CustomerHandlerTest {
 
     @Autowired
     private WebTestClient client;
-
-    @Autowired
-    private CustomerRepository repository;
 
     @Autowired
     private DatabaseClient databaseClient;

@@ -90,7 +90,7 @@ public class AstroService {
                     System.out.println("First transform on: " + Thread.currentThread().getName());
                     return data + " -> processed";
                 })
-                .publishOn(Schedulers.parallel())  // This affects subsequent operations
+                .publishOn(Schedulers.parallel())  // This affects later operations
                 .map(data -> {
                     System.out.println("Second transform on: " + Thread.currentThread().getName());
                     return data + " -> parallel processed";

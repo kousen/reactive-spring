@@ -161,7 +161,7 @@ CREATE TABLE customer (
 - **Labs.md is authoritative**: Always check labs against actual code
 - **Package consistency critical**: Students copy-paste from labs
 - **External APIs can fail**: Focus on patterns, not specific services  
-- **Both web approaches important**: Traditional vs functional comparison valuable
+- **Both web approaches important**: Traditional vs. functional comparison valuable
 - **Database resets**: Good for training, shows clean slate each run
 - **Test coverage complete**: Every major concept has working tests
 

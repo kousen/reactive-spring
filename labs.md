@@ -70,22 +70,22 @@ This exercise uses the `RestClient` class to synchronously access a RESTful web 
     }
     ```
 
-11. The test asserts that the JSON response contains a field called "people", but that's about all we can do until we parse the data into Java classes. The general form of the response is:
+10. The test asserts that the JSON response contains a field called "people," but that's about all we can do until we parse the data into Java classes. The general form of the response is:
 
     ```javascript
     {
-      "message": "success",
-      "number": NUMBER_OF_PEOPLE_IN_SPACE,
-      "people": [
+      "message" : "success",
+      "number" : NUMBER_OF_PEOPLE_IN_SPACE,
+      "people" : [
         {"name": NAME, "craft": SPACECRAFT_NAME},
-        ...
+        // ...
       ]
     }
     ```
 
-12. Since there are only two nested JSON objects, you can create two classes that model them. Create the classes `Assignment`, which will be the combination of "name" and "craft" for each astronaut, and `AstroResponse`, which holds the complete response, both in the `com.kousenit.restclient.json` package.
+11. Since there are only two nested JSON objects, you can create two classes that model them. Create the classes `Assignment`, which will be the combination of "name" and "craft" for each astronaut, and `AstroResponse`, which holds the complete response, both in the `com.kousenit.restclient.json` package.
 
-13. The code for the classes are shown below. Note how the properties match the keys in the JSON response exactly. You can use annotations from the included Jackson 2 JSON parser to customize the attributes if you like, but in this case it's easy enough to make them the same as the JSON variable names.
+12. The code for the classes are shown below. Note how the properties match the keys in the JSON response exactly. You can use annotations from the included Jackson 2 JSON parser to customize the attributes if you like, but in this case it's easy enough to make them the same as the JSON variable names.
 
     ```java
     package com.kousenit.restclient.json;
@@ -120,7 +120,7 @@ This exercise uses the `RestClient` class to synchronously access a RESTful web 
     }
     ```
 
-14. Note that if you are using Java 17, you can replace these with records instead, because the included Jackson JSON parser understands how to parse JSON into records (in two separate files in the `com.kousenit.restclient.json` package):
+13. Note that if you are using Java 17, you can replace these with records instead, because the included Jackson JSON parser understands how to parse JSON into records (in two separate files in the `com.kousenit.restclient.json` package):
 
     ```java
     public record Assignment(String name, String craft) {
@@ -130,7 +130,7 @@ This exercise uses the `RestClient` class to synchronously access a RESTful web 
     }
     ```
 
-15. The JSON response from the web service can now be converted into an instance of the `AstroResponse` class. Add a method called `getAstroResponseSync` to the `AstroService` that takes no arguments and returns an `AstroResponse`:
+14. The JSON response from the web service can now be converted into an instance of the `AstroResponse` class. Add a method called `getAstroResponseSync` to the `AstroService` that takes no arguments and returns an `AstroResponse`:
 
     ```java
     public AstroResponse getAstroResponseSync() {
@@ -142,7 +142,7 @@ This exercise uses the `RestClient` class to synchronously access a RESTful web 
     }
     ```
 
-16. To use the new method, create a test for it. The source for the test is:
+15. To use the new method, create a test for it. The source for the test is:
 
     ```java
     @Test
@@ -156,11 +156,11 @@ This exercise uses the `RestClient` class to synchronously access a RESTful web 
     }
     ```
 
-17. Note that if you used records for the parsed data, replace `getMessage()` with `message()`, `getNumber()` with `number()`, and `getPeople()` with `people()`.
+16. Note that if you used records for the parsed data, replace `getMessage()` with `message()`, `getNumber()` with `number()`, and `getPeople()` with `people()`.
 
-18. The test verifies that the returned message string is "success", that the number of people in space is non-negative, and that the reported number matches the size of the people collection.
+17. The test verifies that the returned message string is "success," that the number of people in space is non-negative, and that the reported number matches the size of the people collection.
 
-19. Execute the test and make any needed corrections until it passes.
+18. Execute the test and make any necessary corrections until it passes.
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -272,7 +272,7 @@ The idea is to declare an interface with the access methods you want, and add a 
 
 5. That method creates a `WebClient` configured for the base URL, and uses that to build an `HttpServiceProxyFactory`. From the factory, we use the `createClient` method to tell Spring to create a class that implements the `AstroInterface`.
 
-6. To test this, simply reuse the `AstroServiceTest` class by adding another test:
+6. To test this, reuse the `AstroServiceTest` class by adding another test:
 
    ```java
    @Test
@@ -297,7 +297,7 @@ The idea is to declare an interface with the access methods you want, and add a 
 
 This exercise works with a tutorial provided by [Project Reactor](https://projectreactor.io/) to teach the basics of the classes `Flux` and `Mono`.
 
-1. Project Reactor is located at https://projectreactor.io. Under the _Documentation_ header you will find the Reference Guide for Reactor Core at https://projectreactor.io/docs/core/release/reference/ and the Javadocs for that project at https://projectreactor.io/docs/core/release/api/ .
+1. Project Reactor is located at https://projectreactor.io. Under the _Documentation_ header you will find the Reference Guide for Reactor Core at https://projectreactor.io/docs/core/release/reference/ and the Javadocs for that project at https://projectreactor.io/docs/core/release/api/.
 
 2. Inside the Reference Guide, go to _Appendix A: Which Operator Do I Need?_. This will help you solve the tutorial exercises.
 
@@ -311,7 +311,7 @@ This exercise works with a tutorial provided by [Project Reactor](https://projec
 
 7. Complete those exercises as the comments describe.
 
-8. If you have time, feel free to look at the other exercises, which are classes labeled from `Part03StepVerifier` to `Part11BlockingToReactive`. Alternatively, you can simply browse the code for them in the _solution_ branch.
+8. If you have time, feel free to look at the other exercises, which are classes labeled from `Part03StepVerifier` to `Part11BlockingToReactive`. Alternatively, you can browse the code for them in the _solution_ branch.
 
 Hopefully, you will find _Appendix A_ in the reference guide helpful in this, along with the Javadocs.
 
@@ -451,8 +451,8 @@ By default, reactive operations execute on the calling thread. When you introduc
 ### Key Takeaways
 
 - **Always use `Schedulers.boundedElastic()`** for blocking operations
-- **`publishOn()`** is like changing lanes - affects what comes after
-- **`subscribeOn()`** is like choosing your starting point - affects the whole journey  
+- **`publishOn()`** is like changing lanes—affects what comes after
+- **`subscribeOn()`** is like choosing your starting point—affects the whole journey  
 - **File I/O, database calls, and HTTP requests** typically need `boundedElastic()`
 - **Watch the thread names** in logs to understand where your code is running
 
@@ -557,7 +557,7 @@ Watch the console output to see thread names changing as operations move between
    }
    ```
 
-6. We need to create a database to store the data. Here we'll use H2. When we created the project, the Spring Initializr provided an H2 database driver that supports R2DBC. To create the database, add a file called `schema.sql` to the `src/main/resources` folder, containing the following table definition (don't forget the trailing semicolon):
+6. We need to create a database to store the data. Here we'll use H2. When we created the project, the Spring Initializr provided an H2 database driver that supports R2DBC. To create the database, add a file called `schema.sql` to the `src/main/resources` folder, containing the following table definition (remember the trailing semicolon):
 
    ```sql
    create table customer
@@ -840,7 +840,7 @@ Watch the console output to see thread names changing as operations move between
 
 18. Now add a REST controller by creating a class called `CustomerController` in the `com.kousenit.reactivecustomers.controllers` package and annotate the class with `@RestController`.
 
-19. Since all of the methods will be based on the URL path `customers`, add a `@RequestMapping("/customers")` annotation for that to the class.
+19. Since all the methods will be based on the URL path `customers`, add a `@RequestMapping("/customers")` annotation for that to the class.
 
 20. Autowire in the `CustomerRepository`, as shown:
 
