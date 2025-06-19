@@ -58,4 +58,13 @@ class AstroServiceTest {
                 .verifyComplete();
     }
 
+    @Test
+    void getAstroResponseWithRestClient() {
+        AstroResponse response = service.getAstroResponseWithRestClient();
+        assertNotNull(response);
+        assertEquals("success", response.message());
+        assertTrue(response.number() >= 0);
+        assertEquals(response.number(), response.people().size());
+        System.out.println(response);
+    }
 }
