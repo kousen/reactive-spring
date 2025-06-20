@@ -191,6 +191,35 @@ CREATE TABLE customer (
 ./gradlew :reactive-customers:bootRun         # Test reactive endpoints
 ```
 
+## Slidev Presentation Best Practices
+
+### Lessons Learned from slides.md Creation
+
+**Image Implementation:**
+- ❌ `background: url` doesn't work on default layouts
+- ❌ `layout: cover` only works for title slides, breaks content formatting
+- ✅ `layout: image-right` + `image: url` works perfectly for content slides
+- ✅ Use specific Unsplash URLs, not dynamic `source.unsplash.com/?terms`
+- ✅ Add `class: text-sm` if content is too dense for split layout
+
+**Content Organization:**
+- Consolidate duplicate slides using `<v-clicks>` for progressive reveal
+- Balance bullet points - keep essential examples, remove verbose sub-bullets
+- Use code font (`backticks`) for all Java classes, methods, annotations
+- Strategic image placement: 4-5 images max for conceptual slides only
+
+**Technical Setup:**
+- Restart Slidev after adding images or major changes
+- Use `npx @slidev/cli slides.md` for viewing
+- Theme `seriph` works well for technical presentations
+- Progressive reveal keeps audience engaged
+
+**Slide Structure for 5-hour course:**
+- 30-35 slides optimal (8-10 minutes per slide)
+- Foundation → Concepts → Implementation → Advanced
+- Include practical code examples in proper code blocks
+- Balance theory with hands-on examples
+
 ## Troubleshooting
 
 - **Build failures**: Usually dependency or package name issues
@@ -198,3 +227,4 @@ CREATE TABLE customer (
 - **Port conflicts**: Only run one Spring Boot app at a time
 - **IDE issues**: Refresh Gradle project, reimport modules
 - **Package errors**: Verify com.kousenit base package throughout
+- **Slidev images not showing**: Use `layout: image-right` instead of `background:`
