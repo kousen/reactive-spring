@@ -12,6 +12,7 @@ reactive-spring/                     <- Multi-module Gradle project (ROOT)
 ├── CLAUDE.md                       <- This file - context for Claude
 ├── .gitignore                      <- Comprehensive ignore patterns
 ├── labs.md                         <- Complete step-by-step lab exercises
+├── slides.md                       <- Slidev presentation (34 slides, 5-hour course)
 ├── settings.gradle                 <- Multi-module configuration: includes restclient, reactive-customers
 ├── build.gradle                    <- Shared: Spring Boot 3.5.2, Gradle 8.14.2, Java 17
 ├── gradlew, gradlew.bat           <- Root-level Gradle wrapper (8.14.2)
@@ -142,7 +143,8 @@ CREATE TABLE customer (
 4. **Functional Web**: Added RouterConfig, CustomerHandler, CustomerHandlerTest
 5. **Scheduler Examples**: Added comprehensive scheduler demonstrations in AstroService
 6. **Enhanced Labs**: Added navigation links and working code examples
-7. **Cleanup**: Removed failing external APIs, duplicate files, outdated docs
+7. **Slidev Presentation**: Complete 34-slide presentation with progressive reveal
+8. **Cleanup**: Removed failing external APIs, duplicate files, outdated docs
 
 ### Git History Pattern
 - Multiple commits with detailed messages
@@ -155,6 +157,14 @@ CREATE TABLE customer (
 **Duration**: 5-hour intensive course (upgraded from 4 hours)
 **Learning Progression**: REST clients → Schedulers → Reactive data → Reactive web
 **Hands-on Focus**: Working code examples, comprehensive tests, practical exercises
+
+### Course Materials Structure
+- **slides.md**: 34-slide Slidev presentation with progressive reveal
+  - Spring fundamentals → Reactive concepts → WebFlux → Reactive Streams → Advanced topics
+  - Includes live code examples, proper reactive interfaces, scheduler demonstrations
+  - Professional formatting with clickable links and consistent code fonts
+- **labs.md**: Step-by-step hands-on exercises
+- **Working solutions**: Complete implementations in restclient/ and reactive-customers/
 
 ## Notes for Future Sessions
 

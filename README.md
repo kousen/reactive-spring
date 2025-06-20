@@ -16,6 +16,7 @@ Learn reactive programming with Spring Boot, Spring WebFlux, and Project Reactor
 ```
 reactive-spring/
 ├── labs.md                    # Complete lab exercises and instructions
+├── slides.md                  # Slidev presentation (34 slides)
 ├── restclient/               # REST client examples and solutions
 │   ├── RestClient            # Modern synchronous HTTP access
 │   ├── WebClient             # Reactive HTTP access
@@ -75,12 +76,13 @@ reactive-spring/
    ./gradlew :reactive-customers:test
    ```
 
-### Exploring the Labs
+### Exploring the Course Materials
 
-1. **Start with `labs.md`** - Complete step-by-step exercises
-2. **Check the solutions** - Working implementations in each project
-3. **Run the tests** - See reactive programming patterns in action
-4. **Experiment** - Modify code and observe reactive behavior
+1. **View the presentation** - `slides.md` (use [Slidev](https://slidev.antfu.me/) or any Markdown viewer)
+2. **Follow the labs** - `labs.md` contains complete step-by-step exercises
+3. **Check the solutions** - Working implementations in each project
+4. **Run the tests** - See reactive programming patterns in action
+5. **Experiment** - Modify code and observe reactive behavior
 
 ## Lab Exercises
 
@@ -116,12 +118,20 @@ This repository represents a complete, production-ready example of reactive Spri
 - ✅ **Real-world patterns** - Includes error handling, testing, and configuration
 - ✅ **Clean architecture** - Well-organized, documented, and maintainable code
 
-## Additional Resources
+## Course Materials
+
+### Presentation
+- **slides.md** - Complete 34-slide Slidev presentation covering reactive concepts
+- View with [Slidev](https://slidev.antfu.me/): `npx @slidev/cli slides.md`
+- Or open in any Markdown viewer for reference
+
+### Additional Resources
 
 - [Spring WebFlux Documentation](https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html)
 - [Project Reactor Documentation](https://projectreactor.io/docs)
 - [Spring Data R2DBC Reference](https://docs.spring.io/spring-data/r2dbc/docs/current/reference/html/)
 - [Reactive Streams Specification](https://www.reactive-streams.org/)
+- [Slidev Documentation](https://slidev.antfu.me/) - For presentation framework
 
 ---
 
