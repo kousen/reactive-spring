@@ -122,6 +122,8 @@ Kousen IT, Inc.
 </v-clicks>
 
 ---
+background: https://source.unsplash.com/1920x1080/?traffic,highway,flow
+---
 
 # When to Use Reactive
 
@@ -380,6 +382,8 @@ public RouterFunction<ServerResponse> routes(UserHandler handler) {
 </v-clicks>
 
 ---
+background: https://source.unsplash.com/1920x1080/?water,stream,flow
+---
 
 # Reactive Streams
 
@@ -474,6 +478,8 @@ public interface Processor<T,R>
 </v-clicks>
 
 ---
+background: https://source.unsplash.com/1920x1080/?atom,nuclear,science
+---
 
 # Project Reactor
 
@@ -528,6 +534,8 @@ Flux<String> data = Flux.just("1", "2", "invalid", "4")
 
 </v-clicks>
 
+---
+background: https://source.unsplash.com/1920x1080/?gears,machinery,threads
 ---
 
 # Schedulers Overview
