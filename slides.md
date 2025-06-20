@@ -122,7 +122,9 @@ Kousen IT, Inc.
 </v-clicks>
 
 ---
-background: https://source.unsplash.com/1920x1080/?traffic,highway,flow
+layout: image-right
+image: https://images.unsplash.com/photo-1544197150-b99a580bb7a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80
+class: text-sm
 ---
 
 # When to Use Reactive
@@ -131,15 +133,14 @@ background: https://source.unsplash.com/1920x1080/?traffic,highway,flow
 
 - **High-concurrency scenarios**
   - Many simultaneous requests
-  - Limited thread pools
 - **Non-blocking I/O operations**
-  - Database calls, external APIs, file operations
+  - Database calls, external APIs
 - **Stream processing**
   - Real-time data, event-driven architectures
 - **Backpressure handling**
-  - Consumer controls flow rate from producer
+  - Consumer controls flow rate
 - **Not always the answer**
-  - Simple CRUD operations may not benefit
+  - Simple CRUD may not benefit
   - Debugging complexity increases
 
 </v-clicks>
@@ -382,7 +383,8 @@ public RouterFunction<ServerResponse> routes(UserHandler handler) {
 </v-clicks>
 
 ---
-background: https://source.unsplash.com/1920x1080/?water,stream,flow
+layout: image-right
+image: https://images.unsplash.com/photo-1439066615861-d1af74d74000?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80
 ---
 
 # Reactive Streams
@@ -478,7 +480,8 @@ public interface Processor<T,R>
 </v-clicks>
 
 ---
-background: https://source.unsplash.com/1920x1080/?atom,nuclear,science
+layout: image-right
+image: https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80
 ---
 
 # Project Reactor
@@ -535,7 +538,8 @@ Flux<String> data = Flux.just("1", "2", "invalid", "4")
 </v-clicks>
 
 ---
-background: https://source.unsplash.com/1920x1080/?gears,machinery,threads
+layout: image-right
+image: https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80
 ---
 
 # Schedulers Overview
