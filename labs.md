@@ -262,11 +262,10 @@ The idea is to declare an interface with the access methods you want, and add a 
    ```java
    @Bean
    public AstroInterface astroInterface() {
-       WebClient client = WebClient.create("http://api.open-notify.org/");
-       HttpServiceProxyFactory factory =
-                   HttpServiceProxyFactory.builder(WebClientAdapter.forClient(client)).build();
-
-       return factory.createClient(AstroInterface.class);
+        var webClient = WebClient.create("http://api.open-notify.org/");
+        var adapter = WebClientAdapter.create(webClient);
+        var factory = HttpServiceProxyFactory.builderFor(adapter).build();
+        return factory.createClient(AstroInterface.class);
    }
    ```
 
