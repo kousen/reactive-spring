@@ -455,11 +455,11 @@ By default, reactive operations execute on the calling thread. When you introduc
 - **File I/O, database calls, and HTTP requests** typically need `boundedElastic()`
 - **Watch the thread names** in logs to understand where your code is running
 
-### Understanding publishOn vs subscribeOn
+### Understanding publishOn vs. subscribeOn
 
 The difference between `publishOn()` and `subscribeOn()` is crucial but often confusing. Here's a detailed explanation:
 
-#### publishOn() - "Switch Lanes for Everything After This Point"
+#### publishOn()—"Switch Lanes for Everything After This Point"
 
 `publishOn()` affects **downstream operations** (everything that comes AFTER it in the chain):
 
@@ -493,7 +493,7 @@ public Mono<String> demonstratePublishOn() {
 4. Still after publishOn: boundedElastic-1
 ```
 
-#### subscribeOn() - "Start the Whole Chain on This Scheduler"
+#### subscribeOn()—"Start the Whole Chain on This Scheduler"
 
 `subscribeOn()` affects **the source and upstream operations** (where the subscription begins):
 

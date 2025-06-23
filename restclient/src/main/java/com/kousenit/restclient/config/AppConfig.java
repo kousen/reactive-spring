@@ -11,15 +11,10 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 public class AppConfig {
 
     @Bean
-    public WebClient webClient() {
-        return WebClient.create("http://api.open-notify.org");
-    }
-
-    @Bean
-    public AstroInterface astroInterface(WebClient client) {
-        HttpServiceProxyFactory factory =
-                HttpServiceProxyFactory.builderFor(
-                        WebClientAdapter.create(client)).build();
+    public AstroInterface astroInterface() {
+        var webClient = WebClient.create("http://api.open-notify.org");
+        var adapter = WebClientAdapter.create(webClient);
+        var factory = HttpServiceProxyFactory.builderFor(adapter).build();
         return factory.createClient(AstroInterface.class);
     }
 }

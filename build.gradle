@@ -29,7 +29,8 @@ subprojects {
 
     tasks.named('test', Test) {
         useJUnitPlatform()
-        // Suppress JVM class data sharing warnings
-        jvmArgs '-XX:+IgnoreUnrecognizedVMOptions', '-XX:-UseClassDataSharing'
+        jvmArgs '-XX:+IgnoreUnrecognizedVMOptions',
+                '-XX:-UseClassDataSharing',
+                '-XX:+EnableDynamicAgentLoading'
     }
 }
