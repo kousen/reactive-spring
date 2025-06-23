@@ -7,7 +7,7 @@ plugins {
 allprojects {
     group = 'com.kousenit'
     version = '1.0'
-    
+
     repositories {
         mavenCentral()
     }
@@ -19,10 +19,14 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
 
     java {
-        sourceCompatibility = '17'
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
     }
 
     dependencies {
+        implementation 'io.netty:netty-resolver-dns-native-macos:4.1.100.Final:osx-aarch_64'
+
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'io.projectreactor:reactor-test'
     }
@@ -31,6 +35,7 @@ subprojects {
         useJUnitPlatform()
         jvmArgs '-XX:+IgnoreUnrecognizedVMOptions',
                 '-XX:-UseClassDataSharing',
-                '-XX:+EnableDynamicAgentLoading'
+                '-XX:+EnableDynamicAgentLoading',
+                '-Xshare:off'
     }
 }
