@@ -12,7 +12,7 @@ reactive-spring/                     <- Multi-module Gradle project (ROOT)
 ├── CLAUDE.md                       <- This file - context for Claude
 ├── .gitignore                      <- Comprehensive ignore patterns
 ├── labs.md                         <- Complete step-by-step lab exercises
-├── slides.md                       <- Slidev presentation (34 slides, 5-hour course)
+├── slides.md                       <- Slidev presentation (35 slides, 5-hour course)
 ├── settings.gradle                 <- Multi-module configuration: includes restclient, reactive-customers
 ├── build.gradle                    <- Shared: Spring Boot 3.5.2, Gradle 8.14.2, Java 17
 ├── gradlew, gradlew.bat           <- Root-level Gradle wrapper (8.14.2)
@@ -143,8 +143,9 @@ CREATE TABLE customer (
 4. **Functional Web**: Added RouterConfig, CustomerHandler, CustomerHandlerTest
 5. **Scheduler Examples**: Added comprehensive scheduler demonstrations in AstroService
 6. **Enhanced Labs**: Added navigation links and working code examples
-7. **Slidev Presentation**: Complete 34-slide presentation with progressive reveal
+7. **Slidev Presentation**: Complete 35-slide presentation with progressive reveal
 8. **Cleanup**: Removed failing external APIs, duplicate files, outdated docs
+9. **Presentation Improvements**: Added course overview, testing tools slide, fixed image URLs
 
 ### Git History Pattern
 - Multiple commits with detailed messages
@@ -159,10 +160,12 @@ CREATE TABLE customer (
 **Hands-on Focus**: Working code examples, comprehensive tests, practical exercises
 
 ### Course Materials Structure
-- **slides.md**: 34-slide Slidev presentation with progressive reveal
+- **slides.md**: 35-slide Slidev presentation with progressive reveal
   - Spring fundamentals → Reactive concepts → WebFlux → Reactive Streams → Advanced topics
   - Includes live code examples, proper reactive interfaces, scheduler demonstrations
   - Professional formatting with clickable links and consistent code fonts
+  - Course overview and agenda slides for clear expectations
+  - Dedicated testing tools slide covering StepVerifier and WebTestClient
 - **labs.md**: Step-by-step hands-on exercises
 - **Working solutions**: Complete implementations in restclient/ and reactive-customers/
 
@@ -215,10 +218,11 @@ CREATE TABLE customer (
 - Progressive reveal keeps audience engaged
 
 **Slide Structure for 5-hour course:**
-- 30-35 slides optimal (8-10 minutes per slide)
-- Foundation → Concepts → Implementation → Advanced
+- 35 slides optimal (8-10 minutes per slide)
+- Foundation → Concepts → Implementation → Advanced → Testing
 - Include practical code examples in proper code blocks
 - Balance theory with hands-on examples
+- Course overview at beginning sets expectations
 
 ## Troubleshooting
 

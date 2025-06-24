@@ -4,19 +4,20 @@ This repository contains exercise solutions and hands-on labs for a comprehensiv
 
 ## Overview
 
-Learn reactive programming with Spring Boot, Spring WebFlux, and Project Reactor through practical exercises covering:
+A 5-hour intensive workshop teaching reactive programming with Spring Boot, Spring WebFlux, and Project Reactor through practical exercises covering:
 
 - **REST Clients**: RestClient, WebClient, and HTTP Interfaces
 - **Reactive Data Access**: Spring Data R2DBC with H2 database  
 - **Reactive Web Programming**: Both annotated controllers and functional approaches
 - **Testing**: Comprehensive test coverage with WebTestClient and StepVerifier
+- **Schedulers**: Thread management and handling blocking operations
 
 ## Repository Structure
 
 ```
 reactive-spring/
 ├── labs.md                    # Complete lab exercises and instructions
-├── slides.md                  # Slidev presentation (34 slides)
+├── slides.md                  # Slidev presentation (35 slides, 5-hour course)
 ├── restclient/               # REST client examples and solutions
 │   ├── RestClient            # Modern synchronous HTTP access
 │   ├── WebClient             # Reactive HTTP access
@@ -121,8 +122,9 @@ This repository represents a complete, production-ready example of reactive Spri
 ## Course Materials
 
 ### Presentation
-- **slides.md** - Complete 34-slide Slidev presentation covering reactive concepts
+- **slides.md** - Complete 35-slide Slidev presentation covering reactive concepts
 - View with [Slidev](https://slidev.antfu.me/): `npx @slidev/cli slides.md`
+- Includes course overview, testing tools, and progressive reveal animations
 - Or open in any Markdown viewer for reference
 
 ### Additional Resources
