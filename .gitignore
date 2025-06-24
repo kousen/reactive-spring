@@ -24,3 +24,11 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### Node.js ###
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package.json
+package-lock.json
