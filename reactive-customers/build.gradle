@@ -3,5 +3,5 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'io.r2dbc:r2dbc-h2'
-    runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.89.Final:osx-aarch_64'
+    runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.116.Final:osx-aarch_64'
 }

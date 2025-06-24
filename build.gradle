@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '3.5.2' apply false
+    id 'org.springframework.boot' version '3.5.3' apply false
     id 'io.spring.dependency-management' version '1.1.7' apply false
     id 'java'
 }
@@ -25,7 +25,7 @@ subprojects {
     }
 
     dependencies {
-        implementation 'io.netty:netty-resolver-dns-native-macos:4.1.100.Final:osx-aarch_64'
+        implementation 'io.netty:netty-resolver-dns-native-macos:4.1.116.Final:osx-aarch_64'
 
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'io.projectreactor:reactor-test'
