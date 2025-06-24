@@ -1,6 +1,6 @@
 ---
 theme: seriph
-background: https://source.unsplash.com/1920x1080/?java,programming
+background: https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80
 class: text-center
 highlighter: shiki
 lineNumbers: false
@@ -47,15 +47,34 @@ Kousen IT, Inc.
 
 ---
 
-# Exercises
-
+# Course Overview
 
 <v-clicks>
 
-- HTML docs: See the [labs.md](https://github.com/kousen/reactive-spring/blob/main/labs.md) file in the GitHub repository
-- Solutions:
-  - https://github.com/kousen/reactive-spring
-  - https://github.com/kousen/spring-and-spring-boot (MVC, non-reactive)
+- **Duration**: 5-hour intensive workshop
+- **Topics Covered**:
+  - REST clients (RestClient, WebClient, HTTP Interfaces)
+  - Project Reactor fundamentals (Flux, Mono)
+  - Schedulers and thread management
+  - Reactive Spring Data with R2DBC
+  - Reactive controllers and functional endpoints
+- **Hands-on Labs**: 8 exercises with working solutions
+- **Prerequisites**: Java 17+, Spring Boot experience
+
+</v-clicks>
+
+---
+
+# Exercises & Labs
+
+<v-clicks>
+
+- **Lab Materials**: [labs.md](https://github.com/kousen/reactive-spring/blob/main/labs.md) in repository
+- **Solution Code**:
+  - https://github.com/kousen/reactive-spring (this repo)
+  - https://github.com/kousen/spring-and-spring-boot (MVC examples)
+- **Structure**: Progressive exercises building on each concept
+- **Testing**: All solutions include comprehensive test suites
 
 </v-clicks>
 
@@ -117,7 +136,7 @@ Kousen IT, Inc.
   - Annotated with `@SpringBootApplication`
 - Gradle or Maven build produces executable jar in build/libs folder
   - $ java -jar appname.jar
-  - Or use gradle task bootRun
+  - Or use gradle task `bootRun`
 
 </v-clicks>
 
@@ -607,6 +626,38 @@ Mono<String> result = webClient.get().retrieve()
 - Spring has two ways to use Reactor in a web service
   - Annotated controllers are like Spring MVC
   - Functional endpoints use handlers and routing functions
+
+</v-clicks>
+
+---
+
+# Testing Reactive Applications
+
+<v-clicks>
+
+- **`StepVerifier`** - Test reactive streams
+  - Verify elements emitted
+  - Test error scenarios
+  - Validate completion signals
+- **`WebTestClient`** - Test reactive endpoints
+  - Non-blocking test client
+  - Fluent API for assertions
+  - Supports both annotated and functional endpoints
+- **Best Practices**:
+  - Use `virtual time` for testing delays
+  - Test backpressure scenarios
+  - Verify subscription cancellation
+
+```java
+StepVerifier.create(userRepository.findAll())
+    .expectNextCount(3)
+    .verifyComplete();
+
+webTestClient.get().uri("/users")
+    .exchange()
+    .expectStatus().isOk()
+    .expectBodyList(User.class).hasSize(3);
+```
 
 </v-clicks>
 
