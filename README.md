@@ -31,7 +31,7 @@ reactive-spring/
 
 ## Technologies Used
 
-- **Spring Boot 3.5.2** - Latest stable release
+- **Spring Boot 3.5.3** - Latest stable release
 - **Spring WebFlux** - Reactive web framework
 - **Spring Data R2DBC** - Reactive database access
 - **Project Reactor** - Reactive streams implementation

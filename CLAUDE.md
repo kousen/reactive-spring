@@ -14,7 +14,7 @@ reactive-spring/                     <- Multi-module Gradle project (ROOT)
 ├── labs.md                         <- Complete step-by-step lab exercises
 ├── slides.md                       <- Slidev presentation (35 slides, 5-hour course)
 ├── settings.gradle                 <- Multi-module configuration: includes restclient, reactive-customers
-├── build.gradle                    <- Shared: Spring Boot 3.5.2, Gradle 8.14.2, Java 17
+├── build.gradle                    <- Shared: Spring Boot 3.5.3, Gradle 8.14.2, Java 17
 ├── gradlew, gradlew.bat           <- Root-level Gradle wrapper (8.14.2)
 ├── restclient/                    <- REST client examples (com.kousenit.restclient)
 │   ├── build.gradle               <- Dependencies: spring-boot-starter-web, webflux
@@ -46,7 +46,7 @@ reactive-spring/                     <- Multi-module Gradle project (ROOT)
 
 ## Key Technologies & Versions
 
-- **Spring Boot**: 3.5.2 (latest stable)
+- **Spring Boot**: 3.5.3 (latest stable)
 - **Gradle**: 8.14.2 (latest stable)
 - **Java**: 17 (minimum requirement)
 - **Package Base**: `com.kousenit` (consolidated from previous `com.oreilly`)
@@ -139,7 +139,7 @@ CREATE TABLE customer (
 ### Major Refactoring (Latest)
 1. **Consolidated Projects**: Removed reactive-officers, enhanced reactive-customers
 2. **Package Rename**: com.oreilly → com.kousenit throughout
-3. **Version Updates**: Spring Boot 3.5.2, Gradle 8.14.2
+3. **Version Updates**: Spring Boot 3.5.3, Gradle 8.14.2
 4. **Functional Web**: Added RouterConfig, CustomerHandler, CustomerHandlerTest
 5. **Scheduler Examples**: Added comprehensive scheduler demonstrations in AstroService
 6. **Enhanced Labs**: Added navigation links and working code examples
